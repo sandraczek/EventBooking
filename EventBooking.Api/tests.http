@@ -1,0 +1,46 @@
+@HostAddress = http://localhost:5295
+
+###
+POST {{HostAddress}}/api/students/register
+Content-Type: application/json
+
+{
+  "email": "sandraczek@student.agh.edu.pl",
+  "password": "adminadmin",
+  "firstName": "Stefan",
+  "lastName": "Andraczek",
+  "indexNumber": "430693"
+}
+
+###
+POST {{HostAddress}}/api/events/create
+Content-Type: application/json
+
+{
+  "name": "Wielki Bal Wydziałowy 2026",
+  "description": "Największa impreza tego roku! Obowiązują stroje wieczorowe. W cenie biletu: ciepły posiłek, DJ do białego rana i niezapomniane wspomnienia. Otwarcie bramek o 20:00.",
+  "date": "2026-10-15T20:00:00Z",
+  "maxParticipants": 200,
+  "ticketPrice": 250.00
+}
+
+###
+GET {{HostAddress}}/api/events
+
+###
+POST {{HostAddress}}/api/reservations/request
+Content-Type: application/json
+
+{
+  "eventId": "6dbf9255-8b76-4632-9cb8-d4555abe0f1b",
+  "studentId": "af66c7d1-d197-4142-806a-751aab7a0684"
+}
+
+### Crash test
+POST {{HostAddress}}/api/reservations/request
+Content-Type: application/json
+
+{
+  "eventId": "00000000-0000-0000-0000-000000000001",
+  "studentId": "00000000-0000-0000-0000-000000000002"
+}

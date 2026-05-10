@@ -1,0 +1,39 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card bg-dark text-white shadow">
+        <div class="card-header border-bottom border-light">
+          <h4 class="mb-0 text-warning">Event Booking - Angular UI</h4>
+        </div>
+        <div class="card-body">
+
+          <form [formGroup]="reservationForm" (ngSubmit)="onSubmit()">
+            <div class="mb-3">
+              <label class="form-label">Wybierz wydarzenie:</label>
+              <select class="form-select" formControlName="eventId">
+                <option value="" disabled>-- Wybierz z listy --</option>
+                <option *ngFor="let ev of events" [value]="ev.id">
+                  {{ ev.name }} (Max miejsc: {{ ev.maxParticipants }})
+                </option>
+              </select>
+            </div>
+
+            <div class="mb-4">
+              <label class="form-label">Twoje ID Studenta (GUID):</label>
+              <input type="text" class="form-control" formControlName="studentId" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx">
+            </div>
+
+            <button type="submit" class="btn btn-warning w-100 fw-bold" [disabled]="isSubmitting">
+              {{ isSubmitting ? 'Loading...' : 'Book' }}
+            </button>
+          </form>
+
+          <div *ngIf="statusMessage" class="alert mt-4" [ngClass]="{'alert-danger': isError, 'alert-success': !isError}">
+            {{ statusMessage }}
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
