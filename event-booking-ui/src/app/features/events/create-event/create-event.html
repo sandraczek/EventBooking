@@ -1,0 +1,35 @@
+<div class="auth-container">
+  <div class="auth-card">
+    <h2>Dodaj nowe wydarzenie</h2>
+    <form [formGroup]="eventForm" (ngSubmit)="onSubmit()">
+
+      <div class="form-group">
+        <label>Tytuł wydarzenia</label>
+        <input type="text" formControlName="name" placeholder="np. Wykład z .NET">
+      </div>
+
+      <div class="form-group">
+        <label>Opis</label>
+        <textarea formControlName="description" rows="4" style="width: 100%; border-radius: 4px; border: 1px solid #ccc;"></textarea>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Data i godzina</label>
+          <input type="datetime-local" formControlName="date">
+        </div>
+        <div class="form-group">
+          <label>Liczba miejsc</label>
+          <input type="number" formControlName="maxParticipants">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Cena biletu</label>
+        <textarea formControlName="ticketPrice" rows="4" style="width: 100%; border-radius: 4px; border: 1px solid #ccc;"></textarea>
+      </div>
+
+      <button type="submit" [disabled]="eventForm.invalid" class="btn-primary">Opublikuj wydarzenie</button>
+    </form>
+  </div>
+</div>

@@ -18,13 +18,8 @@
               </select>
             </div>
 
-            <div class="mb-4">
-              <label class="form-label">Twoje ID Studenta (GUID):</label>
-              <input type="text" class="form-control" formControlName="studentId" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx">
-            </div>
-
             <button type="submit" class="btn btn-warning w-100 fw-bold" [disabled]="isSubmitting">
-              {{ isSubmitting ? 'Loading...' : 'Book' }}
+              {{ isSubmitting ? 'Loading...' : 'Zapisz się' }}
             </button>
           </form>
 

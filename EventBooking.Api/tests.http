@@ -6,10 +6,18 @@ Content-Type: application/json
 
 {
   "email": "sandraczek@student.agh.edu.pl",
-  "password": "adminadmin",
+  "password": "adminadmin0",
   "firstName": "Stefan",
   "lastName": "Andraczek",
   "indexNumber": "430693"
+}
+###
+POST {{HostAddress}}/api/students/login
+Content-Type: application/json
+
+{
+  "email": "sandraczek@student.agh.edu.pl",
+  "password": "adminadmin0"
 }
 
 ###

@@ -8,30 +8,18 @@ public class StudentConfiguration : IEntityTypeConfiguration<Student>
 {
     public void Configure(EntityTypeBuilder<Student> builder)
     {
-        builder.ToTable("Students");
-        
         builder.HasKey(s => s.Id);
         
-        builder.Property(s => s.Email)
-            .IsRequired()
-            .HasMaxLength(200);
+        builder.Property(s => s.FirstName).IsRequired().HasMaxLength(50);
+        builder.Property(s => s.LastName).IsRequired().HasMaxLength(50);
+        builder.Property(s => s.IndexNumber).IsRequired().HasMaxLength(6);
         
-        builder.HasIndex(s => s.Email)
-            .IsUnique();
-
-        builder.Property(s => s.PasswordHash)
-            .IsRequired();
-
-        builder.Property(s => s.FirstName)
+        builder.HasIndex(s => s.IndexNumber).IsUnique();
+        
+        builder.HasOne<ApplicationUser>()
+            .WithOne()
+            .HasForeignKey<Student>(s => s.Id)
             .IsRequired()
-            .HasMaxLength(100);
-
-        builder.Property(s => s.LastName)
-            .IsRequired()
-            .HasMaxLength(100);
-
-        builder.Property(s => s.IndexNumber)
-            .IsRequired()
-            .HasMaxLength(6);
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

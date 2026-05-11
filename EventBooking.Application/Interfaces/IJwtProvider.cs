@@ -4,5 +4,5 @@ namespace EventBooking.Application.Interfaces;
 
 public interface IJwtProvider
 {
-    string Generate(Student student);
+    Task<string> GenerateAsync(ApplicationUser user);
 }

@@ -1,27 +1,33 @@
 using EventBooking.Application.Interfaces;
 using EventBooking.Domain.Entities;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
 
 namespace EventBooking.Application.Students.Commands.RegisterStudent;
 
 public class RegisterStudentCommandHandler(
     IStudentRepository studentRepository,
-    IPasswordHasher passwordHasher)
+    UserManager<ApplicationUser> userManager)
     : IRequestHandler<RegisterStudentCommand, Guid>
 {
     public async Task<Guid> Handle(RegisterStudentCommand request, CancellationToken cancellationToken)
     {
-        var isUnique = await studentRepository.IsEmailUniqueAsync(request.Email, cancellationToken);
-        if (!isUnique)
+        var user = new ApplicationUser 
+        { 
+            UserName = request.Email, 
+            Email = request.Email 
+        };
+
+        var result = await userManager.CreateAsync(user, request.Password);
+        
+        if (!result.Succeeded)
         {
-            throw new InvalidOperationException("Student with this email already exists.");
+            var errors = string.Join(", ", result.Errors.Select(e => e.Description));
+            throw new InvalidOperationException($"Failed to create user: {errors}");
         }
         
-        var hashedPassword = passwordHasher.Hash(request.Password);
-        
         var student = Student.Create(
-            request.Email,
-            hashedPassword,
+            user.Id,
             request.FirstName,
             request.LastName,
             request.IndexNumber);

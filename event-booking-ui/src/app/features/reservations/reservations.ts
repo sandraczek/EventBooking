@@ -1,16 +1,16 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
-import { ReservationService, EventDto } from './reservation';
+import { ReservationService, EventDto } from './reservation-service';
 
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  templateUrl: './reservations.html',
+  styleUrls: ['./reservations.scss']
 })
-export class AppComponent implements OnInit {
+export class Reservations implements OnInit {
   private reservationService = inject(ReservationService);
   private fb = inject(FormBuilder);
 
@@ -21,7 +21,6 @@ export class AppComponent implements OnInit {
 
   reservationForm = this.fb.group({
     eventId: ['', Validators.required],
-    studentId: ['', [Validators.required, Validators.pattern('^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$')]]
   });
 
   ngOnInit(): void {

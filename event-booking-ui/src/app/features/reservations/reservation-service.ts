@@ -8,9 +8,8 @@ export interface EventDto {
   maxParticipants: number;
 }
 
-export interface CreateReservationCommand {
+export interface CreateReservationRequest {
   eventId: string;
-  studentId: string;
 }
 
 @Injectable({
@@ -24,7 +23,7 @@ export class ReservationService {
     return this.http.get<EventDto[]>(`${this.apiUrl}/events`);
   }
 
-  createReservation(command: CreateReservationCommand): Observable<any> {
-    return this.http.post(`${this.apiUrl}/reservations/request`, command);
+  createReservation(request: CreateReservationRequest): Observable<any> {
+    return this.http.post(`${this.apiUrl}/reservations/request`, request);
   }
 }

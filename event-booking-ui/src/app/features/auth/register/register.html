@@ -1,0 +1,39 @@
+<div class="auth-container">
+  <div class="auth-card">
+    <h2>Rejestracja Studenta</h2>
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Imię</label>
+          <input type="text" formControlName="firstName">
+        </div>
+        <div class="form-group">
+          <label>Nazwisko</label>
+          <input type="text" formControlName="lastName">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Numer Indeksu</label>
+        <input type="text" formControlName="indexNumber">
+      </div>
+
+      <div class="form-group">
+        <label>E-mail wydziałowy</label>
+        <input type="email" formControlName="email">
+      </div>
+
+      <div class="form-group">
+        <label>Hasło</label>
+        <input type="password" formControlName="password">
+      </div>
+
+      <div *ngIf="errorMessage" class="error-alert">{{ errorMessage }}</div>
+
+      <button type="submit" [disabled]="registerForm.invalid" class="btn-primary">Załóż konto</button>
+    </form>
+
+    <p class="switch-mode">Masz już konto? <a routerLink="/login">Zaloguj się</a></p>
+  </div>
+</div>

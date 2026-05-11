@@ -1,4 +1,5 @@
 using EventBooking.Application.Students.Commands.RegisterStudent;
+using EventBooking.Application.Students.Queries.Login;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,5 +15,19 @@ public class StudentsController(IMediator mediator) : ControllerBase
         var studentId = await mediator.Send(command, cancellationToken);
         
         return Ok(new { Id = studentId, Message = "Student registered successfully!" });
+    }
+    
+    [HttpPost("login")]
+    public async Task<IActionResult> Login([FromBody] LoginQuery query)
+    {
+        try
+        {
+            var token = await mediator.Send(query);
+            return Ok(new { AccessToken = token });
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            return Unauthorized(ex.Message);
+        }
     }
 }
