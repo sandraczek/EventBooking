@@ -17,7 +17,7 @@ public static class DatabaseSeeder
             await roleManager.CreateAsync(new IdentityRole<Guid>("Admin"));
         }
         
-        const string adminEmail = "admin@wydzial.pl";
+        const string adminEmail = "admin@admin.com";
         var adminUser = await userManager.FindByEmailAsync(adminEmail);
 
         if (adminUser == null)
@@ -29,12 +29,16 @@ public static class DatabaseSeeder
                 EmailConfirmed = true
             };
             
-            var result = await userManager.CreateAsync(adminUser, "Admin123!"); 
+            var result = await userManager.CreateAsync(adminUser, "adminadmin0"); 
 
             if (result.Succeeded)
             {
                 await userManager.AddToRoleAsync(adminUser, "Admin");
             }
+        }
+        else if (!await userManager.IsInRoleAsync(adminUser, "Admin"))
+        {
+            await userManager.AddToRoleAsync(adminUser, "Admin");
         }
     }
 }

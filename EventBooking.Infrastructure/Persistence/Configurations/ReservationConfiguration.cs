@@ -11,6 +11,15 @@ public class ReservationConfiguration : IEntityTypeConfiguration<Reservation>
         builder.ToTable("Reservations");
 
         builder.HasKey(r => r.Id);
+        
+        builder.HasOne(r => r.Student)
+            .WithMany()
+            .HasForeignKey(r => r.StudentId)
+            .OnDelete(DeleteBehavior.Cascade);
+        
+        builder.HasOne(r => r.Event)
+            .WithMany()
+            .HasForeignKey(r => r.EventId);
 
         builder.Property(r => r.EventId)
             .IsRequired();

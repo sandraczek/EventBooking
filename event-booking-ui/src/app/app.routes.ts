@@ -5,6 +5,7 @@ import { Reservations } from './features/reservations/reservations';
 import { CreateEvent } from './features/events/create-event/create-event';
 import { authGuard } from './core/auth/auth-guard';
 import { adminGuard } from './core/auth/admin-guard';
+import { UserList } from './core/users/user-list/user-list';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -14,6 +15,11 @@ export const routes: Routes = [
   {
     path: 'add-event',
     component: CreateEvent,
+    canActivate: [authGuard, adminGuard]
+  },
+  {
+    path: 'users',
+    component: UserList,
     canActivate: [authGuard, adminGuard]
   }
 ];

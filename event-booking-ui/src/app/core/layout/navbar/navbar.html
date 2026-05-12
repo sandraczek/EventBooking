@@ -1,0 +1,29 @@
+<nav class="navbar">
+  <div class="navbar-brand">
+    <a routerLink="/reservations">Wydziałowe Wydarzenia</a>
+  </div>
+
+  <ul class="navbar-menu">
+    <ng-container *ngIf="authService.isLoggedIn(); else loggedOut">
+      <li>
+        <a routerLink="/reservations" routerLinkActive="active-link">Rezerwacje</a>
+      </li>
+
+      <li *ngIf="authService.isAdmin()">
+        <a routerLink="/add-event" routerLinkActive="active-link" class="admin-link">Dodaj wydarzenie</a>
+      </li>
+      <li *ngIf="authService.isAdmin()">
+        <a routerLink="/users" routerLinkActive="active-link" class="admin-link">Zarządzaj studentami</a>
+      </li>
+
+      <li>
+        <button class="btn-logout" (click)="logout()">Wyloguj się</button>
+      </li>
+    </ng-container>
+
+    <ng-template #loggedOut>
+      <li><a routerLink="/login" routerLinkActive="active-link">Zaloguj</a></li>
+      <li><a routerLink="/register" routerLinkActive="active-link">Zarejestruj</a></li>
+    </ng-template>
+  </ul>
+</nav>

@@ -60,6 +60,7 @@ public static class DependencyInjection
         services.AddScoped<IStudentRepository, StudentRepository>();
         services.AddScoped<IEventRepository, EventRepository>();
         services.AddScoped<IReservationRepository, ReservationRepository>();
+        services.AddScoped<IUserRepository, UserRepository>();
         
         services.AddSingleton<IReservationChannel, ReservationChannel>();
         services.AddHostedService<ReservationBackgroundWorker>();

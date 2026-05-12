@@ -10,6 +10,9 @@ public class Reservation
     public DateTime ReservationDate { get; private set; }
     public ReservationStatus Status { get; private set; }
     
+    public Student? Student { get; set; }
+    public Event? Event { get; set; }
+    
     private Reservation() { }
 
     public Reservation(Guid eventId, Guid studentId, ReservationStatus status)

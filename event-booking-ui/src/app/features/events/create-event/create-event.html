@@ -10,7 +10,7 @@
 
       <div class="form-group">
         <label>Opis</label>
-        <textarea formControlName="description" rows="4" style="width: 100%; border-radius: 4px; border: 1px solid #ccc;"></textarea>
+        <textarea formControlName="description" rows="4"></textarea>
       </div>
 
       <div class="form-row">
@@ -25,8 +25,8 @@
       </div>
 
       <div class="form-group">
-        <label>Cena biletu</label>
-        <textarea formControlName="ticketPrice" rows="4" style="width: 100%; border-radius: 4px; border: 1px solid #ccc;"></textarea>
+        <label>Cena biletu (PLN)</label>
+        <input type="number" formControlName="ticketPrice" placeholder="np. 50">
       </div>
 
       <button type="submit" [disabled]="eventForm.invalid" class="btn-primary">Opublikuj wydarzenie</button>

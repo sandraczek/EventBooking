@@ -1,0 +1,35 @@
+<div class="admin-container">
+  <div class="card">
+    <div class="header">
+      <h2>Lista Studentów</h2>
+      <button class="btn-refresh" (click)="loadUsers()">Odśwież</button>
+    </div>
+
+    <table class="user-table">
+      <thead>
+      <tr>
+        <th>Imię i Nazwisko</th>
+        <th>E-mail</th>
+        <th>ID (GUID)</th>
+        <th>Akcje</th>
+      </tr>
+      </thead>
+      <tbody>
+        @for (user of users(); track user.id) {
+          <tr>
+            <td>{{ user.firstName }} {{ user.lastName }}</td>
+            <td>{{ user.email }}</td>
+            <td class="guid-cell">{{ user.id }}</td>
+            <td>
+              <button class="btn-delete" (click)='deleteUser(user.id)'>Usuń</button>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="4" class="empty-msg">Brak zarejestrowanych studentów.</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>
