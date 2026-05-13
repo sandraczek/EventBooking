@@ -15,7 +15,7 @@ The system uses CQRS (via MediatR) to separate the booking logic from simple dat
 
  ---------- Tech Stack ----------
 
- - Backend - 
+ - Backend - (main focus)
 
 C# / .NET 8 (ASP.NET Core Web API)
 
@@ -26,7 +26,7 @@ CQRS (MediatR)
 Asynchronous Processing (System.Threading.Channels, BackgroundService)
 
 
- - Frontend -
+ - Frontend - (not main focus)
 
 Angular (Standalone Components)
 
