@@ -7,6 +7,9 @@ public class Student
     public string LastName { get; private set; } = null!;
     public string IndexNumber { get; private set; } = null!;
     
+    // AGH email convention -----------
+    public string UniversityEmail => $"{IndexNumber}@student.agh.edu.pl";
+    
     private Student() { }
     
     public static Student Create(Guid userId, string firstName, string lastName, string indexNumber)

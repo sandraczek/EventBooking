@@ -1,5 +1,7 @@
 using EventBooking.Application.Students.Commands.RegisterStudent;
+using EventBooking.Application.Students.Commands.SendStudentConfirmationMail;
 using EventBooking.Application.Students.Queries.Login;
+using EventBooking.Application.Students.Requests.SendStudentConfirmationMail;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -29,5 +31,15 @@ public class StudentsController(IMediator mediator) : ControllerBase
         {
             return Unauthorized(ex.Message);
         }
+    }
+    [HttpPost("send-confirmation")]
+    public async Task<IActionResult> SendConfirmationEmail(SendStudentConfirmationMailRequest request, CancellationToken cancellationToken)
+    {
+        var baseUrl = $"{Request.Scheme}://{Request.Host}";
+        
+        var command = new SendStudentConfirmationMailCommand(request.StudentId, baseUrl);
+        await mediator.Send(command, cancellationToken);
+
+        return Accepted();
     }
 }

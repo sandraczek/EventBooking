@@ -14,4 +14,8 @@ public class UserRepository(ApplicationDbContext dbContext) : IUserRepository
             .OrderBy(u => u.Email)
             .ToListAsync(cancellationToken);
     }
+    public async Task<ApplicationUser?> GetAsync(Guid userId, CancellationToken cancellationToken)
+    {
+        return await dbContext.Users.FindAsync(userId, cancellationToken);
+    }
 }

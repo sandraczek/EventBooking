@@ -1,6 +1,8 @@
 using EventBooking.Api.Infrastructure;
 using EventBooking.Application;
 using EventBooking.Infrastructure;
+using EventBooking.Infrastructure.Authentication;
+using Hangfire;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,6 +34,13 @@ if (app.Environment.IsDevelopment())
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseHangfireDashboard(); 
+
+RecurringJob.AddOrUpdate<UnverifiedUserCleanupJob>(
+    "Student-Accounts-Cleanup", 
+    job => job.ExecuteAsync(), 
+    Cron.Minutely());
 
 app.MapControllers();
 

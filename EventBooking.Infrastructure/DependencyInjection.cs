@@ -12,6 +12,9 @@ using System.Text;
 using EventBooking.Infrastructure.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Hangfire;
+using Hangfire.PostgreSql;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace EventBooking.Infrastructure;
 
@@ -64,6 +67,23 @@ public static class DependencyInjection
         
         services.AddSingleton<IReservationChannel, ReservationChannel>();
         services.AddHostedService<ReservationBackgroundWorker>();
+        
+        services.AddTransient<IEmailSender, EmailSender>();
+        
+        services.AddTransient<UnverifiedUserCleanupJob>();
+        
+        var connectionString = configuration.GetConnectionString("Database");
+
+        services.AddHangfire(config => config
+            .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+            .UseSimpleAssemblyNameTypeSerializer()
+            .UseRecommendedSerializerSettings()
+            .UsePostgreSqlStorage(options =>
+            {
+                options.UseNpgsqlConnection(connectionString);
+            }));
+        
+        services.AddHangfireServer();
 
         return services;
     }

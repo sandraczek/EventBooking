@@ -19,4 +19,9 @@ public class StudentRepository(ApplicationDbContext dbContext) : IStudentReposit
             .AsNoTracking()
             .AnyAsync(s => s.Id == studentId, cancellationToken);
     }
+
+    public async Task<Student?> GetAsync(Guid studentId, CancellationToken cancellationToken)
+    {
+        return await dbContext.Students.FindAsync(studentId, cancellationToken);
+    }
 }

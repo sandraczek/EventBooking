@@ -13,7 +13,7 @@ public class StudentConfiguration : IEntityTypeConfiguration<Student>
         builder.Property(s => s.FirstName).IsRequired().HasMaxLength(50);
         builder.Property(s => s.LastName).IsRequired().HasMaxLength(50);
         builder.Property(s => s.IndexNumber).IsRequired().HasMaxLength(6);
-        
+
         builder.HasIndex(s => s.IndexNumber).IsUnique();
         
         builder.HasOne<ApplicationUser>()

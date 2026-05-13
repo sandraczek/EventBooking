@@ -12,12 +12,12 @@ public class ReservationConfiguration : IEntityTypeConfiguration<Reservation>
 
         builder.HasKey(r => r.Id);
         
-        builder.HasOne(r => r.Student)
+        builder.HasOne<Student>()
             .WithMany()
             .HasForeignKey(r => r.StudentId)
             .OnDelete(DeleteBehavior.Cascade);
         
-        builder.HasOne(r => r.Event)
+        builder.HasOne<Event>()
             .WithMany()
             .HasForeignKey(r => r.EventId);
 

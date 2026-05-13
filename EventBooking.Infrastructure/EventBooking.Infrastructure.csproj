@@ -4,13 +4,17 @@
         <TargetFramework>net10.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-    </PropertyGroup>
+      <UserSecretsId>29fc9c93-9c80-4e18-9778-e63dfa9abb3b</UserSecretsId>
+  </PropertyGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\EventBooking.Application\EventBooking.Application.csproj" />
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="Hangfire.AspNetCore" Version="1.8.23" />
+      <PackageReference Include="Hangfire.PostgreSql" Version="1.21.1" />
+      <PackageReference Include="MailKit" Version="4.16.0" />
       <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.7" />
       <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.7" />
       <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.7" />
