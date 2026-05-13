@@ -27,6 +27,7 @@ public class EmailSender(IConfiguration config, UserManager<ApplicationUser> use
         using var client = new SmtpClient();
         try
         {
+            Console.WriteLine("TWOJ USERNAME ----------" + settings["Username"]);
             await client.ConnectAsync(settings["Server"] ?? "", int.Parse(settings["Port"] ?? ""), SecureSocketOptions.StartTls);
             await client.AuthenticateAsync(settings["Username"] ?? "", settings["Password"] ?? "");
             await client.SendAsync(emailMessage);

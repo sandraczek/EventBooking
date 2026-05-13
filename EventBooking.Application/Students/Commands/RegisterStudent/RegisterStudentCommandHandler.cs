@@ -23,7 +23,7 @@ public class RegisterStudentCommandHandler(
         if (!result.Succeeded)
         {
             var errors = string.Join(", ", result.Errors.Select(e => e.Description));
-            throw new InvalidOperationException($"Failed to create user: {errors}");
+            throw new InvalidOperationException($"Failed to create student: {errors}");
         }
         
         var student = Student.Create(
@@ -31,6 +31,15 @@ public class RegisterStudentCommandHandler(
             request.FirstName,
             request.LastName,
             request.IndexNumber);
+        
+        var roleResult = await userManager.AddToRoleAsync(user, "Student");
+        
+        if (!roleResult.Succeeded)
+        {
+            await userManager.DeleteAsync(user);
+            var errors = string.Join(", ", roleResult.Errors.Select(e => e.Description));
+            throw new InvalidOperationException($"Failed to create student: {errors}");
+        }
         
         await studentRepository.AddAsync(student, cancellationToken);
         

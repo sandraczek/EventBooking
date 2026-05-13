@@ -12,7 +12,7 @@ public class UnverifiedUserCleanupJob(
 
     public async Task ExecuteAsync()
     {
-        var cutoffTime = DateTime.UtcNow.AddHours(-0);
+        var cutoffTime = DateTime.UtcNow.AddHours(-24);
         
         var deadAccounts = await userManager.Users
             .Where(u => !u.EmailConfirmed && u.CreatedAt < cutoffTime)

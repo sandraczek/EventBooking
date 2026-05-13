@@ -4,6 +4,7 @@ using EventBooking.Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Extensions.Configuration;
 
 namespace EventBooking.Application.Students.Commands.SendStudentConfirmationMail;
 
@@ -11,6 +12,7 @@ public class SendStudentConfirmationMailCommandHandler(
     IUserRepository userRepository,
     IStudentRepository studentRepository,
     IEmailer emailer,
+    IConfiguration config,
     UserManager<ApplicationUser> userManager
     ) : IRequestHandler<SendStudentConfirmationMailCommand, bool>
 {
@@ -24,8 +26,11 @@ public class SendStudentConfirmationMailCommandHandler(
         
         var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
         var encodedToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
+
+        var baseUrl = config["FrontendSettings:BaseUrl"];
+        if (string.IsNullOrEmpty(baseUrl)) throw new Exception("Config error: no frontend url.");
         
-        var endpointPath = $"{request.BaseUrl}/api/students/confirm-email";
+        var endpointPath = $"{baseUrl}/api/students/confirm-email";
         var queryParams = new Dictionary<string, string?>
         {
             { "userId", user.Id.ToString() },
@@ -34,7 +39,7 @@ public class SendStudentConfirmationMailCommandHandler(
         
         var confirmationLink = QueryHelpers.AddQueryString(endpointPath, queryParams);
         await emailer.SendEmailAsync(
-            student.UniversityEmail, // UNI email 
+            student.UniversityEmail, // UNI email for student
             "Confirm your e-mail", 
             $"Click this link to confirm your email: <a href='{confirmationLink}'>CONFIRM</a>"
             );

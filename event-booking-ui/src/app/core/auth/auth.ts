@@ -1,17 +1,26 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, signal, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { tap } from 'rxjs/operators';
+
+export interface User {
+  id: string;
+  email: string;
+  role: string | string[];
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private readonly API_URL = 'http://localhost:5295/api/students';
+  private http = inject(HttpClient);
+
+  private readonly API_URL = 'http://localhost:5295/api/students'; // Zastanów się w wolnej chwili nad environment.ts
   private readonly TOKEN_KEY = 'access_token';
 
-  currentUser = signal<{ isLoggedIn: boolean } | null>(null);
+  // Sygnał teraz trzyma pełne dane użytkownika, a nie tylko flagę
+  currentUser = signal<User | null>(null);
 
-  constructor(private http: HttpClient) {
+  constructor() {
     this.checkToken();
   }
 
@@ -24,7 +33,7 @@ export class AuthService {
       .pipe(
         tap(response => {
           localStorage.setItem(this.TOKEN_KEY, response.accessToken);
-          this.currentUser.set({ isLoggedIn: true });
+          this.setUserFromToken(response.accessToken);
         })
       );
   }
@@ -43,9 +52,21 @@ export class AuthService {
   }
 
   private checkToken() {
-    if (this.isLoggedIn()) {
-      this.currentUser.set({ isLoggedIn: true });
+    const token = this.getToken();
+    if (token) {
+      this.setUserFromToken(token);
     }
+  }
+
+  private setUserFromToken(token: string) {
+    const decoded = this.decodeToken(token);
+    if (!decoded) return;
+
+    this.currentUser.set({
+      id: decoded.sub, // sub pochodzi z JwtProvider.cs
+      email: decoded.email,
+      role: decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] || []
+    });
   }
 
   private decodeToken(token: string): any {
@@ -58,15 +79,12 @@ export class AuthService {
   }
 
   isAdmin(): boolean {
-    const token = this.getToken();
-    if (!token) return false;
+    const user = this.currentUser();
+    if (!user) return false;
 
-    const decodedToken = this.decodeToken(token);
-    const roleClaim = decodedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
-
-    if (Array.isArray(roleClaim)) {
-      return roleClaim.includes('Admin');
+    if (Array.isArray(user.role)) {
+      return user.role.includes('Admin');
     }
-    return roleClaim === 'Admin';
+    return user.role === 'Admin';
   }
 }

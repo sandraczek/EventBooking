@@ -1,0 +1,21 @@
+<div class="settings-layout">
+  <aside class="settings-sidebar">
+    <nav>
+      <ul>
+        <li>
+          <button
+            [class.active]="activeTab() === 'student'"
+            (click)="activeTab.set('student')">
+            Status Studenta
+          </button>
+        </li>
+      </ul>
+    </nav>
+  </aside>
+
+  <main class="settings-content">
+    @if (activeTab() === 'student') {
+      <app-student-profile />
+    }
+  </main>
+</div>

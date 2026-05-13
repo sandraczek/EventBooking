@@ -37,7 +37,8 @@ public static class DependencyInjection
                 options.Password.RequiredLength = 8;
             })
             .AddRoles<IdentityRole<Guid>>()
-            .AddEntityFrameworkStores<ApplicationDbContext>();
+            .AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddDefaultTokenProviders();
         
         services.AddAuthentication(options =>
             {
@@ -68,7 +69,9 @@ public static class DependencyInjection
         services.AddSingleton<IReservationChannel, ReservationChannel>();
         services.AddHostedService<ReservationBackgroundWorker>();
         
-        services.AddTransient<IEmailSender, EmailSender>();
+        services.AddTransient<EmailSender>();
+        services.AddTransient<IEmailSender>(es => es.GetRequiredService<EmailSender>());
+        services.AddTransient<IEmailer>(es => es.GetRequiredService<EmailSender>());
         
         services.AddTransient<UnverifiedUserCleanupJob>();
         

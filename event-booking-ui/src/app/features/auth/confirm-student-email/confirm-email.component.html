@@ -1,0 +1,12 @@
+<div class="confirm-container">
+  @if (status() === 'loading') {
+    <h2>Weryfikowanie adresu e-mail...</h2>
+  } @else if (status() === 'success') {
+    <h2 class="text-success">Email potwierdzony!</h2>
+    <p>Możesz teraz w pełni korzystać ze swojego konta studenckiego.</p>
+    <a routerLink="/login" class="btn">Zaloguj się</a>
+  } @else {
+    <h2 class="text-error">Weryfikacja nieudana</h2>
+    <p>Link wygasł lub został już użyty. Spróbuj wysłać go ponownie z ustawień profilu.</p>
+  }
+</div>

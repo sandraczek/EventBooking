@@ -1,16 +1,21 @@
+using System.Security.Claims;
+using EventBooking.Application.Students.Commands.ConfirmStudentMail;
 using EventBooking.Application.Students.Commands.RegisterStudent;
 using EventBooking.Application.Students.Commands.SendStudentConfirmationMail;
 using EventBooking.Application.Students.Queries.Login;
-using EventBooking.Application.Students.Requests.SendStudentConfirmationMail;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.JsonWebTokens;
 
 namespace EventBooking.Api.Controllers;
 
-[ApiController] 
+[ApiController]
+[Authorize]
 [Route("api/[controller]")] 
 public class StudentsController(IMediator mediator) : ControllerBase
 {
+    [AllowAnonymous]
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterStudentCommand command, CancellationToken cancellationToken)
     {
@@ -19,6 +24,7 @@ public class StudentsController(IMediator mediator) : ControllerBase
         return Ok(new { Id = studentId, Message = "Student registered successfully!" });
     }
     
+    [AllowAnonymous]
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginQuery query)
     {
@@ -32,14 +38,34 @@ public class StudentsController(IMediator mediator) : ControllerBase
             return Unauthorized(ex.Message);
         }
     }
+    [Authorize(Roles = "Student")]
     [HttpPost("send-confirmation")]
-    public async Task<IActionResult> SendConfirmationEmail(SendStudentConfirmationMailRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> SendConfirmationEmail(CancellationToken cancellationToken)
     {
-        var baseUrl = $"{Request.Scheme}://{Request.Host}";
+        var userIdString = User.FindFirstValue(JwtRegisteredClaimNames.Sub) 
+                           ?? User.FindFirstValue(ClaimTypes.NameIdentifier);
         
-        var command = new SendStudentConfirmationMailCommand(request.StudentId, baseUrl);
+        if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var studentGuid))
+        {
+            return Unauthorized("Token invalid. Missing student Id.");
+        }
+        
+        var command = new SendStudentConfirmationMailCommand(studentGuid);
         await mediator.Send(command, cancellationToken);
 
         return Accepted();
+    }
+    
+    [HttpGet("confirm-email")]
+    public async Task<IActionResult> ConfirmEmail([FromQuery] string userId, [FromQuery] string token)
+    {
+        if (string.IsNullOrWhiteSpace(userId) || string.IsNullOrWhiteSpace(token))
+            return BadRequest("Bad confirmation data.");
+
+        var result = await mediator.Send(new ConfirmStudentMailCommand(userId, token));
+
+        return result ? 
+            Ok(new { Message = "Email confirmed!" }) :
+            BadRequest("Could not confirm email.");
     }
 }

@@ -16,6 +16,10 @@ public static class DatabaseSeeder
         {
             await roleManager.CreateAsync(new IdentityRole<Guid>("Admin"));
         }
+        if (!await roleManager.RoleExistsAsync("Student"))
+        {
+            await roleManager.CreateAsync(new IdentityRole<Guid>("Student"));
+        }
         
         const string adminEmail = "admin@admin.com";
         var adminUser = await userManager.FindByEmailAsync(adminEmail);

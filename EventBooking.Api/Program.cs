@@ -40,7 +40,7 @@ app.UseHangfireDashboard();
 RecurringJob.AddOrUpdate<UnverifiedUserCleanupJob>(
     "Student-Accounts-Cleanup", 
     job => job.ExecuteAsync(), 
-    Cron.Minutely());
+    Cron.Hourly());
 
 app.MapControllers();
 
