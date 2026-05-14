@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 export interface EventDto {
   id: string;
@@ -26,7 +27,7 @@ export interface CreateReservationRequest {
 })
 export class ReservationService {
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:5295/api';
+  private apiUrl = environment.apiUrl + '/api';
 
   getEvents(): Observable<EventDto[]> {
     return this.http.get<EventDto[]>(`${this.apiUrl}/events`);

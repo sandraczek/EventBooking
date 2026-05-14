@@ -1,6 +1,7 @@
 import { Injectable, signal, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { tap } from 'rxjs/operators';
+import { environment } from '../../../environments/environment';
 
 export interface User {
   id: string;
@@ -14,10 +15,9 @@ export interface User {
 export class AuthService {
   private http = inject(HttpClient);
 
-  private readonly API_URL = 'http://localhost:5295/api/students'; // Zastanów się w wolnej chwili nad environment.ts
+  private readonly API_URL = environment.apiUrl + '/api/students';
   private readonly TOKEN_KEY = 'access_token';
 
-  // Sygnał teraz trzyma pełne dane użytkownika, a nie tylko flagę
   currentUser = signal<User | null>(null);
 
   constructor() {

@@ -1,6 +1,7 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-confirm-email',
@@ -24,7 +25,7 @@ export class ConfirmStudentEmailComponent implements OnInit {
       return;
     }
 
-    this.http.get(`http://localhost:5295/api/students/confirm-email`, {
+    this.http.get(environment.apiUrl + `/api/students/confirm-email`, {
       params: { userId, token }
     }).subscribe({
       next: () => this.status.set('success'),

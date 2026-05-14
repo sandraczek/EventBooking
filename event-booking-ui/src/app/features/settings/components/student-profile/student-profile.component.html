@@ -20,24 +20,4 @@
       <p class="status-message" [class.error]="isError()">{{ emailMessage() }}</p>
     }
   </article>
-
-  <article class="settings-card mt-4">
-    <h3>Numer indeksu</h3>
-    <p class="hint">W przyszłości będziesz mógł tutaj zaktualizować swój numer indeksu.</p>
-
-    <form [formGroup]="studentForm">
-      <div class="form-group">
-        <label for="indexNumber">Twój Indeks</label>
-        <input
-          id="indexNumber"
-          type="text"
-          formControlName="indexNumber"
-          placeholder="Brak (oczekuje na API)"
-        />
-      </div>
-      <button type="submit" [disabled]="true" class="btn-secondary">
-        Zapisz indeks (Zablokowane)
-      </button>
-    </form>
-  </article>
 </section>

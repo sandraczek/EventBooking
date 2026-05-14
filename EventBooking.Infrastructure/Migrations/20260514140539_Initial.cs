@@ -222,8 +222,7 @@ namespace EventBooking.Infrastructure.Migrations
                     EventId = table.Column<Guid>(type: "uuid", nullable: false),
                     UserId = table.Column<Guid>(type: "uuid", nullable: false),
                     ReservationDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Status = table.Column<string>(type: "text", nullable: false),
-                    EventId1 = table.Column<Guid>(type: "uuid", nullable: false)
+                    Status = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -231,12 +230,6 @@ namespace EventBooking.Infrastructure.Migrations
                     table.ForeignKey(
                         name: "FK_Reservations_Events_EventId",
                         column: x => x.EventId,
-                        principalTable: "Events",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Reservations_Events_EventId1",
-                        column: x => x.EventId1,
                         principalTable: "Events",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -301,11 +294,6 @@ namespace EventBooking.Infrastructure.Migrations
                 table: "Reservations",
                 columns: new[] { "EventId", "UserId" },
                 unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Reservations_EventId1",
-                table: "Reservations",
-                column: "EventId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Reservations_UserId",

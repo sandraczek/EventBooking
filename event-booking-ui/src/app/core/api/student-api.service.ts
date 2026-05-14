@@ -1,12 +1,12 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class StudentApiService {
   private http = inject(HttpClient);
-  // Ścieżka bazowa na razie z palca, zrób z tym porządek (environments) w przyszłości
-  private readonly baseUrl = 'http://localhost:5295/api/students';
+  private readonly baseUrl = environment.apiUrl + '/api/students';
 
   sendConfirmationEmail(): Observable<void> {
     // Interceptor sam dołoży nagłówek Authorization z tokenem
