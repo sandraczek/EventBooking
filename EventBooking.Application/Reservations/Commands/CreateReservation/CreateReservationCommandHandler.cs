@@ -1,26 +1,36 @@
 using EventBooking.Application.Interfaces;
 using MediatR;
+using Org.BouncyCastle.Asn1.Cms;
 
 namespace EventBooking.Application.Reservations.Commands.CreateReservation;
 
 public class CreateReservationCommandHandler(
     IReservationChannel channel, 
-    IStudentRepository studentRepository,
+    IUserRepository userRepository,
     IEventRepository eventRepository)
-    : IRequestHandler<CreateReservationCommand, Guid>
+    : IRequestHandler<CreateReservationCommand>
 {
-    public async Task<Guid> Handle(CreateReservationCommand request, CancellationToken cancellationToken)
+    public async Task Handle(CreateReservationCommand request, CancellationToken cancellationToken)
     {
-        var studentExists = await studentRepository.ExistsAsync(request.StudentId, cancellationToken);
-        if (!studentExists)
-            throw new InvalidOperationException($"Student with Id '{request.StudentId}' does not exists.");
-
-        var eventExists = await eventRepository.Exists(request.EventId, cancellationToken);
-        if (!eventExists)
-            throw new InvalidOperationException($"Event with Id '{request.EventId}' does not exists.");
+        if(request.UserRole == null) throw new InvalidOperationException($"User has no role");
+        
+        var userExists = await userRepository.ExistsAsync(request.UserId, cancellationToken);
+        if (!userExists)
+            throw new InvalidOperationException($"User with Id '{request.UserId}' does not exists.");
+        
+        var e = await eventRepository.GetByIdAsync(request.EventId, cancellationToken);
+        if (e == null) throw new InvalidOperationException($"Event with Id '{request.EventId}' does not exists.");
+        
+        var phaseForUser = e.RegistrationPhases.FirstOrDefault(p => p.TargetRole == request.UserRole);
+        if (phaseForUser == null)
+        {
+            throw new UnauthorizedAccessException($"Group '{request.UserRole}' is not permitted to this event.");
+        }
+        if (DateTimeOffset.UtcNow < phaseForUser.StartTime)
+        {
+            throw new InvalidOperationException($"Reservations for group '{request.UserRole}' start on {phaseForUser.StartTime:dd.MM.yyyy HH:mm}!");
+        }
 
         await channel.AddToQueueAsync(request, cancellationToken);
-
-        return Guid.Empty; 
     }
 }

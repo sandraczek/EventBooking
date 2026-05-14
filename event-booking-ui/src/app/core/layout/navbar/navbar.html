@@ -13,6 +13,12 @@
         <a routerLink="/settings" routerLinkActive="active-link">Ustawienia</a>
       </li>
 
+      @if (!authService.isAdmin()) {
+        <li>
+          <a routerLink="/my-reservations" routerLinkActive="active-link">Moje Rezerwacje</a>
+        </li>
+      }
+
       @if (authService.isAdmin()) {
         <li>
           <a routerLink="/add-event" routerLinkActive="active-link" class="admin-link">Dodaj wydarzenie</a>

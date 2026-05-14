@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { Login } from './features/auth/login/login';
 import { Register } from './features/auth/register/register';
 import { Reservations } from './features/reservations/reservations';
+import { MyReservations } from './features/reservations/my-reservations/my-reservations';
 import { CreateEvent } from './features/events/create-event/create-event';
 import { authGuard } from './core/auth/auth-guard';
 import { adminGuard } from './core/auth/admin-guard';
@@ -32,6 +33,7 @@ export const routes: Routes = [
   {
     path: 'api/students/confirm-email',
     component : ConfirmStudentEmailComponent
-  }
+  },
+  { path: 'my-reservations', component: MyReservations, canActivate: [authGuard] },
 
 ];

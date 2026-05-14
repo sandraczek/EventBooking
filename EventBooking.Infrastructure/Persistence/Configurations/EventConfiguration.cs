@@ -25,5 +25,10 @@ public class EventConfiguration : IEntityTypeConfiguration<Event>
         builder.Property(e => e.TicketPrice)
             .IsRequired()
             .HasPrecision(18, 2);
+        
+        builder.HasMany(e => e.RegistrationPhases)
+            .WithOne()
+            .HasForeignKey(p => p.EventId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

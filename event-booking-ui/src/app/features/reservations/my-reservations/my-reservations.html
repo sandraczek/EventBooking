@@ -1,0 +1,48 @@
+<section class="reservations-container">
+  <header class="page-header">
+    <h1>Twoje Rezerwacje</h1>
+    <p>Zarządzaj swoimi zapisanymi wydarzeniami na uczelni.</p>
+  </header>
+
+  @if (isLoading()) {
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Ładowanie Twoich wydarzeń...</p>
+    </div>
+  } @else if (error()) {
+    <div class="error-state">
+      <p>{{ error() }}</p>
+      <button (click)="fetchReservations()" class="btn-retry">Spróbuj ponownie</button>
+    </div>
+  } @else {
+    <div class="grid-layout">
+      @for (res of reservations(); track res.reservationId) {
+        <article class="reservation-card">
+          <div class="card-header">
+            <span class="status-badge" [ngClass]="res.status.toLowerCase()">
+              {{ res.status === 'Confirmed' ? 'Potwierdzona' : res.status }}
+            </span>
+            <span class="date-label">{{ res.eventDate | date:'dd.MM.yyyy HH:mm' }}</span>
+          </div>
+
+          <div class="card-body">
+            <h2 class="event-title">{{ res.eventTitle }}</h2>
+            <p class="meta-info">Zarezerwowano: {{ res.createdAt | date:'shortDate' }}</p>
+          </div>
+
+          <div class="card-footer">
+            <button class="btn-cancel" (click)="cancelReservation(res.reservationId)">
+              Zrezygnuj
+            </button>
+          </div>
+        </article>
+      } @empty {
+        <div class="empty-state">
+          <img src="https://cdn-icons-png.flaticon.com/512/7486/7486754.png" alt="Brak rezerwacji" class="empty-icon"/>
+          <h3>Nie masz jeszcze żadnych rezerwacji</h3>
+          <p>Przejdź do listy wydarzeń, aby zapisać się na nadchodzące spotkania.</p>
+        </div>
+      }
+    </div>
+  }
+</section>

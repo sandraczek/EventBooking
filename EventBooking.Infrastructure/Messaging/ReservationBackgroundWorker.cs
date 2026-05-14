@@ -34,12 +34,12 @@ public class ReservationBackgroundWorker(
                     ? ReservationStatus.Confirmed 
                     : ReservationStatus.ReserveList;
 
-                var reservation = new Reservation(command.EventId, command.StudentId, status);
+                var reservation = new Reservation(command.EventId, command.UserId, status);
                 await reservationRepository.AddAsync(reservation, stoppingToken);
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "Error handling {StudentId} reservation request.", command.StudentId);
+                logger.LogError(ex, "Error handling {StudentId} reservation request.", command.UserId);
             }
         }
     }

@@ -1,0 +1,135 @@
+.reservations-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+}
+
+.page-header {
+  margin-bottom: 2rem;
+
+  h1 { font-size: 2rem; margin-bottom: 0.5rem; color: var(--text-main); }
+  p { color: var(--text-muted); font-size: 1.1rem; }
+}
+
+/* Układ siatki - responsywny z automatu */
+.grid-layout {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+/* Karta rezerwacji */
+.reservation-card {
+  background: var(--card-bg);
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.04);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  display: flex;
+  flex-direction: column;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 15px rgba(0,0,0,0.08);
+  }
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid #f0f0f0;
+  background: var(--accent);
+  border-radius: 12px 12px 0 0;
+}
+
+.date-label {
+  font-size: 0.85rem;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* Znacznik statusu */
+.status-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+
+  &.confirmed { background: #d4edda; color: #155724; }
+  &.pending { background: #fff3cd; color: #856404; }
+  &.cancelled { background: #f8d7da; color: #721c24; }
+}
+
+.card-body {
+  padding: 1.5rem 1.25rem;
+  flex-grow: 1;
+
+  .event-title {
+    font-size: 1.25rem;
+    margin: 0 0 0.5rem 0;
+    line-height: 1.4;
+  }
+
+  .meta-info {
+    font-size: 0.85rem;
+    color: #888;
+    margin: 0;
+  }
+}
+
+.card-footer {
+  padding: 1rem 1.25rem;
+  border-top: 1px solid #f0f0f0;
+  text-align: right;
+}
+
+/* Przyciski */
+.btn-cancel {
+  background: transparent;
+  color: #dc3545;
+  border: 1px solid #dc3545;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover { background: #dc3545; color: #fff; }
+}
+
+.btn-retry {
+  background: #007bff; color: white; border: none;
+  padding: 0.75rem 1.5rem; border-radius: 6px; cursor: pointer;
+  font-weight: 600; margin-top: 1rem;
+}
+
+/* Stany puste i ładowania */
+.empty-state, .loading-state, .error-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: var(--card-bg);
+  border: 2px dashed var(--border);
+  border-radius: 12px;
+  grid-column: 1 / -1; /* Rozciągnięcie na całą szerokość siatki */
+
+  .empty-icon { width: 80px; opacity: 0.5; margin-bottom: 1rem; }
+  h3 { margin-bottom: 0.5rem; color: var(--text-main); }
+  p { color: var(--text-muted); }
+}
+
+.error-state { border-color: #f5c6cb; background: #fff8f8; color: #721c24; }
+
+/* Prosty Spinner w CSS */
+.spinner {
+  width: 40px; height: 40px; margin: 0 auto 1rem auto;
+  border: 4px solid #f3f3f3; border-top: 4px solid #007bff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }

@@ -4,5 +4,6 @@ namespace EventBooking.Application.Reservations.Commands.CreateReservation;
 
 public record CreateReservationCommand(
     Guid EventId,
-    Guid StudentId
-    ) : IRequest<Guid>;
+    Guid UserId,
+    string? UserRole
+    ) : IRequest;

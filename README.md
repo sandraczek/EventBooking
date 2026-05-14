@@ -25,6 +25,8 @@ CQRS (MediatR)
 
 Asynchronous Processing (System.Threading.Channels, BackgroundService)
 
+SMTP (emails)
+
 
  - Frontend - (not main focus)
 
@@ -43,7 +45,5 @@ Asynchronous ticket booking system.
 
 Real-time seat allocation with strict limit enforcement.
 
-Responsive, reactive UI for the booking process.
+Student email confirmation.
 
-Work in Progress / Next Steps
-TODO

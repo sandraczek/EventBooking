@@ -8,5 +8,6 @@ public interface IReservationRepository
     
     Task<int> GetCountByEventIdAsync(Guid eventId, CancellationToken cancellationToken);
     
-    Task<bool> HasStudentAlreadyBookedAsync(Guid eventId, Guid studentId, CancellationToken cancellationToken);
+    Task<bool> HasUserAlreadyBookedAsync(Guid eventId, Guid userId, CancellationToken cancellationToken);
+    Task<IEnumerable<Reservation>> GetUserReservationsAsync(Guid userId, CancellationToken cancellationToken);
 }

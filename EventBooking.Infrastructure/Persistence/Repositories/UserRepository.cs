@@ -14,6 +14,12 @@ public class UserRepository(ApplicationDbContext dbContext) : IUserRepository
             .OrderBy(u => u.Email)
             .ToListAsync(cancellationToken);
     }
+    public async Task<bool> ExistsAsync(Guid userId, CancellationToken cancellationToken)
+    {
+        return await dbContext.Users
+            .AsNoTracking()
+            .AnyAsync(s => s.Id == userId, cancellationToken);
+    }
     public async Task<ApplicationUser?> GetAsync(Guid userId, CancellationToken cancellationToken)
     {
         return await dbContext.Users.FindAsync(userId, cancellationToken);

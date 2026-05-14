@@ -11,23 +11,19 @@ public class ReservationConfiguration : IEntityTypeConfiguration<Reservation>
         builder.ToTable("Reservations");
 
         builder.HasKey(r => r.Id);
-        
+
         builder.HasOne<Student>()
             .WithMany()
-            .HasForeignKey(r => r.StudentId)
-            .OnDelete(DeleteBehavior.Cascade);
-        
-        builder.HasOne<Event>()
+            .HasForeignKey(r => r.UserId)
+            .OnDelete(DeleteBehavior.Cascade)
+            .IsRequired();
+
+        builder.HasOne(r => r.Event)
             .WithMany()
-            .HasForeignKey(r => r.EventId);
-
-        builder.Property(r => r.EventId)
+            .HasForeignKey(r => r.EventId)
             .IsRequired();
 
-        builder.Property(r => r.StudentId)
-            .IsRequired();
-
-        builder.HasIndex(r => new {r.EventId, r.StudentId })
+        builder.HasIndex(r => new {r.EventId, StudentId = r.UserId })
         .IsUnique();
         
         builder.Property(r => r.Status)

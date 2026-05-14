@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EventBooking.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260510214315_AddIdentitySupport")]
-    partial class AddIdentitySupport
+    [Migration("20260514013712_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -37,6 +37,9 @@ namespace EventBooking.Infrastructure.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -124,6 +127,29 @@ namespace EventBooking.Infrastructure.Migrations
                     b.ToTable("Events", (string)null);
                 });
 
+            modelBuilder.Entity("EventBooking.Domain.Entities.EventRegistrationPhase", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("EventId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset>("StartTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("TargetRole")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EventId");
+
+                    b.ToTable("EventRegistrationPhase");
+                });
+
             modelBuilder.Entity("EventBooking.Domain.Entities.Reservation", b =>
                 {
                     b.Property<Guid>("Id")
@@ -133,6 +159,9 @@ namespace EventBooking.Infrastructure.Migrations
                     b.Property<Guid>("EventId")
                         .HasColumnType("uuid");
 
+                    b.Property<Guid>("EventId1")
+                        .HasColumnType("uuid");
+
                     b.Property<DateTime>("ReservationDate")
                         .HasColumnType("timestamp with time zone");
 
@@ -140,12 +169,16 @@ namespace EventBooking.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<Guid>("StudentId")
+                    b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EventId", "StudentId")
+                    b.HasIndex("EventId1");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("EventId", "UserId")
                         .IsUnique();
 
                     b.ToTable("Reservations", (string)null);
@@ -154,11 +187,7 @@ namespace EventBooking.Infrastructure.Migrations
             modelBuilder.Entity("EventBooking.Domain.Entities.Student", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -175,15 +204,9 @@ namespace EventBooking.Infrastructure.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
-
                     b.HasKey("Id");
 
                     b.HasIndex("IndexNumber")
-                        .IsUnique();
-
-                    b.HasIndex("UserId")
                         .IsUnique();
 
                     b.ToTable("Students");
@@ -319,11 +342,43 @@ namespace EventBooking.Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("EventBooking.Domain.Entities.EventRegistrationPhase", b =>
+                {
+                    b.HasOne("EventBooking.Domain.Entities.Event", null)
+                        .WithMany("RegistrationPhases")
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("EventBooking.Domain.Entities.Reservation", b =>
+                {
+                    b.HasOne("EventBooking.Domain.Entities.Event", null)
+                        .WithMany()
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EventBooking.Domain.Entities.Event", "Event")
+                        .WithMany()
+                        .HasForeignKey("EventId1")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EventBooking.Domain.Entities.Student", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Event");
+                });
+
             modelBuilder.Entity("EventBooking.Domain.Entities.Student", b =>
                 {
                     b.HasOne("EventBooking.Domain.Entities.ApplicationUser", null)
                         .WithOne()
-                        .HasForeignKey("EventBooking.Domain.Entities.Student", "UserId")
+                        .HasForeignKey("EventBooking.Domain.Entities.Student", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -377,6 +432,11 @@ namespace EventBooking.Infrastructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("EventBooking.Domain.Entities.Event", b =>
+                {
+                    b.Navigation("RegistrationPhases");
                 });
 #pragma warning restore 612, 618
         }

@@ -31,6 +31,7 @@ public class EventRepository(ApplicationDbContext dbContext) : IEventRepository
         return await dbContext.Events
             .AsNoTracking()
             .Where(e => e.Id == id)
+            .Include(e => e.RegistrationPhases)
             .FirstOrDefaultAsync(cancellationToken);
     }
     public async Task<bool> Exists(Guid id, CancellationToken cancellationToken)

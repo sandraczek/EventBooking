@@ -8,6 +8,7 @@ public class Event
     public DateTime Date { get; private set; }
     public int MaxParticipants { get; private set; }
     public decimal TicketPrice { get; private set; }
+    public ICollection<EventRegistrationPhase> RegistrationPhases { get; set; } = new List<EventRegistrationPhase>();
     
     private Event() { }
     
@@ -31,5 +32,13 @@ public class Event
         Date = date.ToUniversalTime();
         MaxParticipants = maxParticipants;
         TicketPrice = ticketPrice;
+
+        var phase = new EventRegistrationPhase //TODO
+        {
+            EventId = Id,
+            TargetRole = "Student",
+            StartTime = DateTimeOffset.UtcNow
+        };
+        RegistrationPhases.Add(phase);
     }
 }

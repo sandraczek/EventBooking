@@ -13,13 +13,6 @@ public class StudentRepository(ApplicationDbContext dbContext) : IStudentReposit
         await dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<bool> ExistsAsync(Guid studentId, CancellationToken cancellationToken)
-    {
-        return await dbContext.Students
-            .AsNoTracking()
-            .AnyAsync(s => s.Id == studentId, cancellationToken);
-    }
-
     public async Task<Student?> GetAsync(Guid studentId, CancellationToken cancellationToken)
     {
         return await dbContext.Students.FindAsync(studentId, cancellationToken);

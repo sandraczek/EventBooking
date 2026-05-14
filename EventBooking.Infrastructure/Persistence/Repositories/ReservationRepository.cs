@@ -20,10 +20,20 @@ public class ReservationRepository(ApplicationDbContext dbContext) : IReservatio
             .CountAsync(cancellationToken);
     }
 
-    public async Task<bool> HasStudentAlreadyBookedAsync(Guid eventId, Guid studentId, CancellationToken cancellationToken)
+    public async Task<bool> HasUserAlreadyBookedAsync(Guid eventId, Guid userId, CancellationToken cancellationToken)
     {
         return await dbContext.Reservations
             .AsNoTracking()
-            .AnyAsync(r => r.EventId == eventId && r.StudentId == studentId, cancellationToken);
+            .AnyAsync(r => r.EventId == eventId && r.UserId == userId, cancellationToken);
+    }
+
+    public async Task<IEnumerable<Reservation>> GetUserReservationsAsync(Guid userId, CancellationToken cancellationToken )
+    {
+        return await dbContext.Reservations
+            .AsNoTracking()
+            .Where(r => r.UserId == userId)
+            .Include(r => r.Event)
+            .OrderBy(r => r.Event.Date)
+            .ToListAsync(cancellationToken);
     }
 }

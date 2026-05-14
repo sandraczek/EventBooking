@@ -8,6 +8,15 @@ export interface EventDto {
   maxParticipants: number;
 }
 
+export interface ReservationDto {
+  reservationId: string;
+  eventId: string;
+  eventTitle: string;
+  eventDate: string;
+  status: string;
+  createdAt: string;
+}
+
 export interface CreateReservationRequest {
   eventId: string;
 }
@@ -25,5 +34,9 @@ export class ReservationService {
 
   createReservation(request: CreateReservationRequest): Observable<any> {
     return this.http.post(`${this.apiUrl}/reservations/request`, request);
+  }
+
+  getMyReservations(): Observable<ReservationDto[]> {
+    return this.http.get<ReservationDto[]>(`${this.apiUrl}/reservations`);
   }
 }
