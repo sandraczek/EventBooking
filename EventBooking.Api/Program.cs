@@ -17,13 +17,16 @@ builder.Services.AddProblemDetails();
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll", policy => 
-        policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+    options.AddPolicy("AllowVercel", policy => 
+        policy.WithOrigins("https://event-booking-pearl.vercel.app")
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials()); 
 });
 
 var app = builder.Build(); // --------------------------------------------------
 
-app.UseCors("AllowAll");
+app.UseCors("AllowVercel");
 
 app.UseExceptionHandler();
 
