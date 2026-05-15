@@ -26,7 +26,9 @@ public static class DependencyInjection
         services.AddScoped<IJwtProvider, JwtProvider>();
         
         services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseNpgsql(configuration.GetConnectionString("Database")));
+            options.UseNpgsql(
+                configuration.GetConnectionString("Database"),
+                b => b.MigrationsAssembly("EventBooking.Infrastructure")));
         
         services.AddIdentityCore<ApplicationUser>(options => 
             {
