@@ -13,9 +13,17 @@ A Background Worker processes this queue sequentially.
 This completely eliminates race conditions—available spots are updated safely one by one.
 The system uses CQRS (via MediatR) to separate the booking logic from simple data fetching.
 
+*****
+ [**Live App**](https://event-booking-pearl.vercel.app) 
+
+*Note: first request wakes the server up therefore lasts up to half a minute*
+******
+
  ---------- Tech Stack ----------
 
  - Backend - (main focus)
+
+Azure App Service (Plan F1 - Free Linux)
 
 C# / .NET 8 (ASP.NET Core Web API)
 
@@ -29,6 +37,8 @@ SMTP (emails)
 
 
  - Frontend - (not main focus)
+
+Vercel (Serverless)
 
 Angular (Standalone Components)
 
